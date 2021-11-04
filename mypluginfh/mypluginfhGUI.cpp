@@ -27,6 +27,7 @@ bool SliderAngle_rl(const char* label, float* v_rad, float v_default, int positi
 		*v_rad = position *M_PI_4;
 	}
 	return ret;
+	//ttetete
 }
 
 // Render the plugin settings here
