@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "mypluginfh.h"
-#define M_PI_4 (3.14159265358979323846 / 4)
+#include "inputFun.h"
+
 
 // Plugin Settings Window code here
 std::string mypluginfh::GetPluginName() {
@@ -10,6 +11,7 @@ std::string mypluginfh::GetPluginName() {
 void mypluginfh::SetImGuiContext(uintptr_t ctx) {
 	ImGui::SetCurrentContext(reinterpret_cast<ImGuiContext*>(ctx));
 }
+
 
 bool SliderAngle_rl(const char* label, float* v_rad, float v_default, int position = (-1)) {
 
@@ -27,13 +29,33 @@ bool SliderAngle_rl(const char* label, float* v_rad, float v_default, int positi
 		*v_rad = position *M_PI_4;
 	}
 	return ret;
-	//ttetete
 }
+int output_position(int value, const char *label) {
+const char* items[] = { "Position 0", "Position 1", "Position 2", "Position 3", "Position 4", "Position 5", "Position 6", "Position 7" };
+	const char* combo_preview_value = items[value];
+	if (ImGui::BeginCombo(label, combo_preview_value))
+	{
+		for (int n = 0; n < IM_ARRAYSIZE(items); n++)
+		{
+			const bool is_selected = (value == n);
+			if (ImGui::Selectable(items[n], is_selected))
+				value = n;
 
+			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndCombo();
+	}
+		return value;
+}
 // Render the plugin settings here
 // This will show up in bakkesmod when the plugin is loaded at
 //  f2 -> plugins -> mypluginfh
 void mypluginfh::RenderSettings() {
+	static float ok = 0.0f;
+	forte("kekw",&ok,2.0f);
+	prova1();
 	//Enable plugin
 	static bool check_plug = false;
 	ImGui::Checkbox("Enable", &check_plug); ImGui::SameLine();
@@ -129,6 +151,11 @@ void mypluginfh::RenderSettings() {
 	SliderAngle_rl("Pitch axis", &angle_pitch, 0.0f, pitch_pos);
 	SliderAngle_rl("Roll axis", &angle_roll, 0.0f, roll_pos);
 	ImGui::Text("Steer deg=%f", angle_steer);
+	static int testere = 4;
+
+	output_position(testere, "prova");
+	ImGui::Text("pos %d", testere);
+
 
 	//SliderFloatDefault("okey",&angle_roll,0.0f,6.28f,3.0f);
 	
