@@ -13,49 +13,12 @@ void mypluginfh::SetImGuiContext(uintptr_t ctx) {
 }
 
 
-bool SliderAngle_rl(const char* label, float* v_rad, float v_default, int position = (-1)) {
 
-	bool ret = ImGui::SliderAngle(label, v_rad, 0.0f, 360.0f);
-	if (ImGui::BeginPopupContextItem(label))
-	{
-		char buf[64];
-		sprintf(buf, "Reset to %.f", v_default);
 
-		if (ImGui::MenuItem(buf))
-			*v_rad = v_default;
-		ImGui::EndPopup();
-	}
-	if (position != -1) {
-		*v_rad = position *M_PI_4;
-	}
-	return ret;
-}
-int output_position(int value, const char *label) {
-const char* items[] = { "Position 0", "Position 1", "Position 2", "Position 3", "Position 4", "Position 5", "Position 6", "Position 7" };
-	const char* combo_preview_value = items[value];
-	if (ImGui::BeginCombo(label, combo_preview_value))
-	{
-		for (int n = 0; n < IM_ARRAYSIZE(items); n++)
-		{
-			const bool is_selected = (value == n);
-			if (ImGui::Selectable(items[n], is_selected))
-				value = n;
-
-			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-			if (is_selected)
-				ImGui::SetItemDefaultFocus();
-		}
-		ImGui::EndCombo();
-	}
-		return value;
-}
 // Render the plugin settings here
 // This will show up in bakkesmod when the plugin is loaded at
 //  f2 -> plugins -> mypluginfh
 void mypluginfh::RenderSettings() {
-	static float ok = 0.0f;
-	forte("kekw",&ok,2.0f);
-	prova1();
 	//Enable plugin
 	static bool check_plug = false;
 	ImGui::Checkbox("Enable", &check_plug); ImGui::SameLine();
@@ -83,79 +46,20 @@ void mypluginfh::RenderSettings() {
 	ImGui::NewLine();
 	ImGui::Separator();
 	ImGui::NewLine();
-	ImGui::Text("Car Orientation"); ImGui::SameLine();
-	
-	if (ImGui::Button("Reset")){}
-
-	const char* items[] = { "Position 0", "Position 1", "Position 2", "Position 3", "Position 4", "Position 5", "Position 6", "Position 7"};
-	static int roll_pos = 0; // Here we store our selection data as an index.
-	static int pitch_pos = 0;
-	static int steer_pos = 0;
-	const char* combo_preview_value_roll = items[roll_pos];  // Pass in the preview value visible before opening the combo (it could be anything)
-	const char* combo_preview_value_pitch = items[pitch_pos];
-	const char* combo_preview_value_steer = items[steer_pos];
-	
-	if (ImGui::BeginCombo("Steer", combo_preview_value_steer))
-	{
-		for (int n = 0; n < IM_ARRAYSIZE(items); n++)
-		{
-			const bool is_selected = (steer_pos == n);
-			if (ImGui::Selectable(items[n], is_selected))
-				steer_pos = n;
-
-			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-			if (is_selected)
-				ImGui::SetItemDefaultFocus();
-		}
-		ImGui::EndCombo();
-	} 
-	if (ImGui::BeginCombo("Pitch", combo_preview_value_pitch))
-	{
-		for (int n = 0; n < IM_ARRAYSIZE(items); n++)
-		{
-			const bool is_selected = (pitch_pos == n);
-			if (ImGui::Selectable(items[n], is_selected))
-				pitch_pos = n;
-
-			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-			if (is_selected)
-				ImGui::SetItemDefaultFocus();
-		}
-		ImGui::EndCombo();
-	}
-	if (ImGui::BeginCombo("Roll", combo_preview_value_roll))
-	{
-		for (int n = 0; n < IM_ARRAYSIZE(items); n++)
-		{
-			const bool is_selected = (roll_pos == n);
-			if (ImGui::Selectable(items[n], is_selected))
-				roll_pos = n;
-
-			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-			if (is_selected)
-				ImGui::SetItemDefaultFocus();
-		}
-		ImGui::EndCombo();
-	}
+	ImGui::Text("Car Orientation");
 	//MANUAL
-	ImGui::Text("Manual Car Orientation");
 	static float angle_steer = 0.0f;
 	static float angle_pitch = 0.0f;
 	//ImGui::SliderAngle("Pitch axis", &angle_pitch, 0.0f, 360.0f);
 	static float angle_roll = 0.0f;
 	
-	
-	ImGui::NewLine();
-	ImGui::NewLine();
 	SliderAngle_rl("Steer axis", &angle_steer, 0.0f);
-	SliderAngle_rl("Pitch axis", &angle_pitch, 0.0f, pitch_pos);
-	SliderAngle_rl("Roll axis", &angle_roll, 0.0f, roll_pos);
-	ImGui::Text("Steer deg=%f", angle_steer);
-	static int testere = 4;
-
-	output_position(testere, "prova");
-	ImGui::Text("pos %d", testere);
-
+	ImGui::Text("\t\t\t\t\t\t|\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |");
+	SliderAngle_rl("Pitch axis", &angle_pitch, 0.0f);
+	ImGui::Text("\t\t\t\t\t\t|\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |");
+	SliderAngle_rl("Roll axis", &angle_roll, 0.0f);
+	ImGui::Text("pitch deg=%f", angle_pitch);
+	
 
 	//SliderFloatDefault("okey",&angle_roll,0.0f,6.28f,3.0f);
 	
