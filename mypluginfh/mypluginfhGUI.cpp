@@ -21,32 +21,40 @@ void mypluginfh::SetImGuiContext(uintptr_t ctx) {
 void mypluginfh::RenderSettings() {
 	//Enable plugin
 	static bool check_plug = false;
-	ImGui::Checkbox("Enable", &check_plug); ImGui::SameLine();
+	ImGui::Checkbox("Enable plugin", &check_plug); ImGui::SameLine();
 	static int item_current_1 = 0;
-	ImGui::Combo("Plugin", &item_current_1, "Freeplay\0Local Private match");
+	ImGui::Combo("##choose", &item_current_1, "Freeplay\0Local Private match");
 	ImGui::NewLine();
 	//Enable air steer
 	static bool check_steer = false;
-	ImGui::Checkbox("Enable", &check_steer); ImGui::SameLine();
+	ImGui::Checkbox("Enable Air steer", &check_steer); ImGui::SameLine();
+	
 	static int item_current_2 = 0;
-	ImGui::Combo("Air steer", &item_current_2, "Left\0Right");
+	ImGui::PushID(0);
+	ImGui::RadioButton("Left", &item_current_2, 0); ImGui::SameLine();
+	ImGui::RadioButton("Right", &item_current_2, 1);
+	ImGui::PopID();
+	
 
 	//enable air pitch
 	static bool check_pitch = false;
-	ImGui::Checkbox("Enable", &check_pitch); ImGui::SameLine();
+	ImGui::Checkbox("Enable Air pitch", &check_pitch); ImGui::SameLine();
 	static int item_current_3 = 0;
-	ImGui::Combo("Air pitch", &item_current_3, "Up\0Down");
+	ImGui::RadioButton("Up", &item_current_3, 0); ImGui::SameLine(173);
+	ImGui::RadioButton("Down", &item_current_3, 1);
 
 	//enable air roll
 	static bool check_roll = false;
-	ImGui::Checkbox("Enable", &check_roll); ImGui::SameLine();
+	ImGui::Checkbox("Enable Air roll", &check_roll); ImGui::SameLine(120);
 	static int item_current_4 = 0;
-	ImGui::Combo("Air roll", &item_current_4, "Left\0Right");
+	ImGui::PushID(1);
+	ImGui::RadioButton("Left", &item_current_4, 0); ImGui::SameLine();
+	ImGui::RadioButton("Right", &item_current_4, 1);
+	ImGui::PopID();
 
 	ImGui::NewLine();
 	ImGui::Separator();
-	ImGui::NewLine();
-	ImGui::Text("Car Orientation");
+	ImGui::Text("Initial Car Orientations");
 	//MANUAL
 	static float angle_steer = 0.0f;
 	static float angle_pitch = 0.0f;
@@ -58,10 +66,29 @@ void mypluginfh::RenderSettings() {
 	SliderAngle_rl("Pitch axis", &angle_pitch, 0.0f);
 	ImGui::Text("\t\t\t\t\t\t|\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |\t\t\t\t\t |");
 	SliderAngle_rl("Roll axis", &angle_roll, 0.0f);
-	ImGui::Text("pitch deg=%f", angle_pitch);
-	
 
-	//SliderFloatDefault("okey",&angle_roll,0.0f,6.28f,3.0f);
+	ImGui::NewLine();
+	static bool check_manual_or = false;
+	ImGui::Checkbox("Enable Manual Car Orientation", &check_manual_or);
+	static float add_angle_steer = 0.0f;
+	static float add_angle_pitch = 0.0f;
+	static float add_angle_roll = 0.0f;
+	ImGui::SliderAngle("Add to steer axis", &add_angle_steer, 0.0f, 360.0f);
+	ImGui::SliderAngle("Add to pitch axis", &add_angle_pitch, 0.0f, 360.0f);
+	ImGui::SliderAngle("Add to roll axis", &add_angle_roll, 0.0f, 360.0f);
+
+	ImGui::NewLine();
+	ImGui::Separator();
+	ImGui::Text("Macro timeout");
+	static int timeout = 0;
+	static int max_sec = 30;
+	ImGui::SliderInt("##timeout", &timeout, -1, max_sec, "%d sec");
+	ImGui::InputInt("seconds", &max_sec);
+
+
+	buttons(4, 2.26893f, "Start");
+	ImGui::SameLine();
+	buttons(3, 0.10472f, "Stop");
 	
 }
 

@@ -49,3 +49,14 @@ int output_position(int value, const char* label) {
 	}
 	return value;
 }
+
+bool buttons(int id, float color,const char*name) {
+	ImGui::PushID(id);
+	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(color / 7.0f, 0.6f, 0.6f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(color / 7.0f, 0.7f, 0.7f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(color / 7.0f, 0.8f, 0.8f));
+	bool bottun = ImGui::Button(name);
+	ImGui::PopStyleColor(3);
+	ImGui::PopID();
+	return bottun;
+}
