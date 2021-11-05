@@ -1,34 +1,6 @@
 #include "pch.h"
 #include "inputFun.h"
 
-float rangePI(float value,float start, float end) {
-	if (value > start && value < end)
-		return end;
-	return -1;
-}
-
-bool SliderAngle_rl(const char* label, float* v_rad, float v_default) {
-
-	bool ret = ImGui::SliderAngle(label, v_rad, 0.0f, 360.0f);
-	if (ImGui::BeginPopupContextItem(label))
-	{
-		char buf[64];
-		sprintf(buf, "Reset to %.f", v_default);
-
-		if (ImGui::MenuItem(buf))
-			*v_rad = v_default;
-		ImGui::EndPopup();
-	}
-	float pi4 = M_PI_4;
-	for (int n = 0; n < 8; n++) {
-		float k = rangePI(*v_rad, pi4 * n, pi4 * (n + 1));
-		if (k != -1)
-			*v_rad = k;
-	}
-	return ret;
-}
-
-
 
 int output_position(int value, const char* label) {
 	const char* items[] = { "Position 0", "Position 1", "Position 2", "Position 3", "Position 4", "Position 5", "Position 6", "Position 7" };
@@ -50,13 +22,28 @@ int output_position(int value, const char* label) {
 	return value;
 }
 
-bool buttons(int id, float color,const char*name) {
-	ImGui::PushID(id);
+bool buttons( float color, const char* name) {
+	
 	ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(color / 7.0f, 0.6f, 0.6f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(color / 7.0f, 0.7f, 0.7f));
 	ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(color / 7.0f, 0.8f, 0.8f));
 	bool bottun = ImGui::Button(name);
 	ImGui::PopStyleColor(3);
-	ImGui::PopID();
 	return bottun;
+}
+
+bool newslider(const char* label, int* pos) {
+	enum Element { Element_0, Element_1, Element_2, Element_3, Element_4, Element_5, Element_6, Element_7, Element_8, Element_COUNT };
+	const char* elems_names[Element_COUNT] = { "0 deg", "45 deg", "90 deg", "135 deg","180 deg","225 deg","270 deg","315 deg","360 deg" };
+	const char* elem_name = (*pos >= 0 && *pos < Element_COUNT) ? elems_names[*pos] : "Unknown";
+	bool ret = ImGui::SliderInt(label, pos, 0, Element_COUNT - 1, elem_name);
+	return ret;
+}
+
+void lines() {
+	ImGui::Text("");
+	for (int k = 1; k < 9; k++) {
+		ImGui::SameLine(k * 71);
+		ImGui::Text("|");
+	}
 }
