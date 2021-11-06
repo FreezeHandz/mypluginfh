@@ -20,11 +20,23 @@ void mypluginfh::SetImGuiContext(uintptr_t ctx) {
 
 void mypluginfh::RenderSettings() {
 	//Enable plugin
-	
-	static bool check_plug = false;
-	if (ImGui::Checkbox("Enable plugin", &check_plug)) {
+	CVarWrapper enableCvar = cvarManager->getCvar("flightFH_enabled");
+	if (!enableCvar) {
+		return;
+	}
+
+	bool enabled = enableCvar.getBoolValue();
+	if (ImGui::Checkbox("Enable plugin", &enabled)) {
 		//PG
 		// Start the plugin and set the ball and car location in the map
+
+		//Enable
+		gameWrapper->Execute([this, enableCvar, enabled](...) mutable {
+			enableCvar.setValue(enabled);
+			});
+		//enableCvar.setValue(enabled);
+
+		//Move ball and car
 	}
 	ImGui::SameLine();
 	static int item_current_1 = 0;

@@ -16,7 +16,14 @@ class mypluginfh: public BakkesMod::Plugin::BakkesModPlugin, public BakkesMod::P
 	//Boilerplate
 	virtual void onLoad();
 	virtual void onUnload();
-	void ballOnTop2();
+	
+	void hookEvents();
+	void unhookEvents();
+	ServerWrapper getSW();
+
+	void setBallCarLocation();
+
+
 
 	// Inherited via PluginSettingsWindow
 	
